@@ -13,6 +13,9 @@ public:
 private:
   int value_;
   Node *next_;
+  friend class LinkedList;
+  friend class Stack;
+  friend class Queue;
 };
 
 #endif
