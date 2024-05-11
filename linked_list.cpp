@@ -10,34 +10,73 @@ LinkedList::LinkedList()
 
 LinkedList::~LinkedList()
 {
-    for (int i = 0; i < size_; i++)
-        delete head_;
+    delete head_;
 }
 
+// 각 노드의 데이터를 출력합니다.
 void LinkedList::print()
 {
-    for (int i = 0; i < size_; i++) {
-        std::cout << get(i) << ' ';
+    Node* current = head_;
+    int n = size_;
+    while (n--) {
+        std::cout << current->value_ << " "; 
+        current = current->next_;
     }
+    std::cout << std::endl;
 }
 
 void LinkedList::insert(int index, int value)
 {
-    Node* new_ = new Node(value);
-    Node* pre = head_;
-    Node* next = head_;
-    for (int i = 0; i < index; i ++) {
-        pre = pre->next_;
-        next = next->next_;
+    if (index < 0 || index > size_) {
+        std::cerr << "Invalid index\n";
+        return;
     }
-    next = next->next_;
-
-    pre->next_ = new_;
-    new_->next_ = next;
-
+    Node* new_ = new Node(value);
+    if (index == size_) { // 맨 뒤에 삽입하는 경우
+        if (size_ == 0) { // 리스트가 비어있는 경우
+            head_ = new_;
+        } else {
+            Node* current = head_;
+            for (int i = 0; i < index - 1; i++) {
+                current = current->next_;
+            }
+            current->next_ = new_;
+        }
+    } else if (index == 0) { // 맨 앞에 삽입하는 경우
+        new_->next_ = head_;
+        head_ = new_;
+    } else { // 중간에 삽입하는 경우
+        Node* pre = head_;
+        for (int i = 0; i < index - 1; i++) {
+            pre = pre->next_;
+        }
+        new_->next_ = pre->next_;
+        pre->next_ = new_;
+    }
     size_++;
 }
 
+void LinkedList::remove(int index)
+{
+    if (index < 0 || index > size_) {
+        std::cerr << "Invalid index\n";
+        return;
+    }
+    Node* temp;
+    if (index == 0) {
+        temp = head_;
+        head_ = head_->next_;
+    } else {
+        Node* pre = head_;
+        for (int i = 0; i < index - 1; i++) {
+            pre = pre->next_;
+        }
+        temp = pre->next_;
+        pre->next_ = temp->next_;
+    }
+    delete temp;
+    size_--;
+}
 int LinkedList::get(int index)
 {
     Node* n = head_;
@@ -46,20 +85,4 @@ int LinkedList::get(int index)
     }
 
     return n->value_;
-}
-
-void LinkedList::remove(int index)
-{
-    Node* pre = head_;
-    for (int i = 0; i < index - 1; i++) {
-        pre = pre->next_;
-    }
-    Node* cur = pre;
-    cur = cur->next_; // index
-    Node* next = cur;
-    next = next->next_; // index + 1
-
-    pre->next_ = next;
-    delete cur;
-    size_--;
 }
