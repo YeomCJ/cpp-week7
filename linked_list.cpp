@@ -10,16 +10,23 @@ LinkedList::LinkedList()
 
 LinkedList::~LinkedList()
 {
-    delete head_;
+    Node *current = head_;
+    while (current)
+    {
+        Node *next = current->next_;
+        delete current;
+        current = next;
+    }
 }
 
 // 각 노드의 데이터를 출력합니다.
 void LinkedList::print()
 {
-    Node* current = head_;
+    Node *current = head_;
     int n = size_;
-    while (n--) {
-        std::cout << current->value_ << " "; 
+    while (n--)
+    {
+        std::cout << current->value_ << " ";
         current = current->next_;
     }
     std::cout << std::endl;
@@ -27,27 +34,38 @@ void LinkedList::print()
 
 void LinkedList::insert(int index, int value)
 {
-    if (index < 0 || index > size_) {
+    if (index < 0 || index > size_)
+    {
         std::cerr << "Invalid index\n";
         return;
     }
-    Node* new_ = new Node(value);
-    if (index == size_) { // 맨 뒤에 삽입하는 경우
-        if (size_ == 0) { // 리스트가 비어있는 경우
+    Node *new_ = new Node(value);
+    if (index == size_)
+    { // 맨 뒤에 삽입하는 경우
+        if (size_ == 0)
+        { // 리스트가 비어있는 경우
             head_ = new_;
-        } else {
-            Node* current = head_;
-            for (int i = 0; i < index - 1; i++) {
+        }
+        else
+        {
+            Node *current = head_;
+            for (int i = 0; i < index - 1; i++)
+            {
                 current = current->next_;
             }
             current->next_ = new_;
         }
-    } else if (index == 0) { // 맨 앞에 삽입하는 경우
+    }
+    else if (index == 0)
+    { // 맨 앞에 삽입하는 경우
         new_->next_ = head_;
         head_ = new_;
-    } else { // 중간에 삽입하는 경우
-        Node* pre = head_;
-        for (int i = 0; i < index - 1; i++) {
+    }
+    else
+    { // 중간에 삽입하는 경우
+        Node *pre = head_;
+        for (int i = 0; i < index - 1; i++)
+        {
             pre = pre->next_;
         }
         new_->next_ = pre->next_;
@@ -58,17 +76,22 @@ void LinkedList::insert(int index, int value)
 
 void LinkedList::remove(int index)
 {
-    if (index < 0 || index > size_) {
+    if (index < 0 || index > size_)
+    {
         std::cerr << "Invalid index\n";
         return;
     }
-    Node* temp;
-    if (index == 0) {
+    Node *temp;
+    if (index == 0)
+    {
         temp = head_;
         head_ = head_->next_;
-    } else {
-        Node* pre = head_;
-        for (int i = 0; i < index - 1; i++) {
+    }
+    else
+    {
+        Node *pre = head_;
+        for (int i = 0; i < index - 1; i++)
+        {
             pre = pre->next_;
         }
         temp = pre->next_;
@@ -79,8 +102,9 @@ void LinkedList::remove(int index)
 }
 int LinkedList::get(int index)
 {
-    Node* n = head_;
-    while(index--) {
+    Node *n = head_;
+    while (index--)
+    {
         n = n->next_;
     }
 
